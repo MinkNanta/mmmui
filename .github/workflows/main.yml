@@ -5,33 +5,16 @@ jobs:
     name: Test-Build-Release
     runs-on: ubuntu-latest
     steps:
-     - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v2
 
-      # first, install dependencies and Cypress
-      # from the root folder using the lock file
-      - name: Cypress install
-        uses: cypress-io/github-action@v2
+      - name: Use Node 12
+        uses: actions/setup-node@v1
         with:
-          runTests: false
+          node-version: 12
 
-      # now run the tests from the subfolder
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          install: false
-          working-directory: packages/e2e
-          start: yarn start-server
-      # - name: Checkout repo
-      #   uses: actions/checkout@v2
-
-      # - name: Use Node 12
-      #   uses: actions/setup-node@v1
-      #   with:
-      #     node-version: 12
-
-      # - name: Install deps and build (with cache)
-      #   uses: bahmutov/npm-install@v1
+      - name: Install deps and build (with cache)
+        uses: bahmutov/npm-install@v1
 
       - name: Lint
         run: yarn lint
@@ -47,7 +30,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn semantic-release
-
       # - uses: actions/setup-node@v2
       #   with:
       #     registry-url: 'https://npm.pkg.github.com'
