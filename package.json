@@ -2,7 +2,7 @@
   "name": "mmmui",
   "author": "Mink",
   "module": "dist/mmmui.esm.js",
-  "version": "0.0.0-development",
+  "version": "1.0.0-alpha.1",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
