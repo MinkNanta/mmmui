@@ -5,6 +5,22 @@ jobs:
     name: Test-Build-Release
     runs-on: ubuntu-latest
     steps:
+    - name: Install dependencies
+  run: yarn install --frozen-lockfile
+- name: Check formatting
+  run: yarn run format:check
+- name: Run Cypress
+  uses: cypress-io/github-action@v2
+  with:
+    working-directory: web
+    install: false
+    start: yarn serve
+
+
+
+
+
+
       - name: Checkout repo
         uses: actions/checkout@v2
 
@@ -30,6 +46,13 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn semantic-release
+
+
+
+
+
+
+
       # - uses: actions/setup-node@v2
       #   with:
       #     registry-url: 'https://npm.pkg.github.com'
