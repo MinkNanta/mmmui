@@ -2,34 +2,55 @@ name: CI
 on: [push]
 jobs:
   build:
-    - name: Checkout repo
-      uses: actions/checkout@v2
+    name: Test-Build-Release
+    runs-on: ubuntu-latest
+    steps:
+     - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Use Node 12
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
+      # first, install dependencies and Cypress
+      # from the root folder using the lock file
+      - name: Cypress install
+        uses: cypress-io/github-action@v2
+        with:
+          runTests: false
 
-    - name: Install deps and build (with cache)
-      uses: bahmutov/npm-install@v1
+      # now run the tests from the subfolder
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          working-directory: packages/e2e
+          start: yarn start-server
+      # - name: Checkout repo
+      #   uses: actions/checkout@v2
 
-    - name: Lint
-      run: yarn lint
+      # - name: Use Node 12
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: 12
 
-    - name: Test
-      run: yarn test --ci --coverage --maxWorkers=2
+      # - name: Install deps and build (with cache)
+      #   uses: bahmutov/npm-install@v1
 
-    - name: Build
-      run: yarn build
+      - name: Lint
+        run: yarn lint
 
-    - name: Release
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: yarn semantic-release
-    # - uses: actions/setup-node@v2
-    #   with:
-    #     registry-url: 'https://npm.pkg.github.com'
-    # - run: npm publish
-    #   env:
-    #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test
+        run: yarn test --ci --coverage --maxWorkers=2
+
+      - name: Build
+        run: yarn build
+
+      - name: Release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn semantic-release
+
+      # - uses: actions/setup-node@v2
+      #   with:
+      #     registry-url: 'https://npm.pkg.github.com'
+      # - run: npm publish
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
