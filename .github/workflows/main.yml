@@ -2,19 +2,8 @@ name: CI
 on: [push]
 jobs:
   build:
-    name: Test-Build-Release
-    runs-on: ubuntu-latest
-    steps:
-    - name: Install dependencies
-  run: yarn install --frozen-lockfile
-- name: Check formatting
-  run: yarn run format:check
-- name: Run Cypress
-  uses: cypress-io/github-action@v2
-  with:
-    working-directory: web
-    install: false
-    start: yarn serve
+      - name: Cypress run
+      uses: cypress-io/github-action@v2.2.7
 
 
 
